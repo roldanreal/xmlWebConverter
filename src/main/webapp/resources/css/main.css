@@ -1,0 +1,110 @@
+@CHARSET "ISO-8859-1";
+.error {
+	color: red;
+}
+
+.red {
+    color: red;
+}
+
+.table {
+	max-width: none;
+	table-layout: fixed;
+	word-wrap: break-word;
+}
+
+.inputReceipt {
+	width: 100px;
+}
+
+.posReceipt {
+	font-family: "courier";
+	text-align: center;
+}
+
+#custom-search-input{
+    padding: 3px;
+    border: solid 1px #E4E4E4;
+    border-radius: 6px;
+    background-color: #fff;
+}
+
+#custom-search-input input{
+    border: 0;
+    box-shadow: none;
+}
+
+#custom-search-input button{
+    margin: 2px 0 0 0;
+    background: none;
+    box-shadow: none;
+    border: 0;
+    color: 	#4169E1;
+    padding: 0 8px 0 10px;
+    border-left: solid 1px #ccc;
+}
+
+#custom-search-input button:hover{
+    border: 0;
+    box-shadow: none;
+    border-left: solid 1px #ccc;
+}
+
+#custom-search-input .glyphicon-search{
+    font-size: 23px;
+}
+
+#rightDiv {
+	border-right: 3px solid gray; 
+}
+
+#leftDiv {
+	border-left: 3px solid gray; 
+}
+
+#purchaseItemButton {
+	float: right;
+}
+
+#receiptDiv {
+	margin-top: 15%;
+}
+
+#custom-controls {
+	font-size: medium;
+}
+
+.right {
+	float: right;
+	text-align: right;
+}
+
+.left {
+	float: left;
+	text-align: left;
+}
+
+.table-borderless tbody tr td, .table-borderless tbody tr th, .table-borderless thead tr th {
+    border: none;
+    
+}
+
+#rmcMap { 
+	display: inline-block; 
+	float:left;
+	width:74%;
+	height: 500px;
+}
+
+#graphContainer, #gaugeContainer {
+	display: inline-block;
+	border: 3px solid black;
+	float:left;
+    width:26%;
+    height: 250px;
+}
+
+<!-- Override header in RMC page-->
+.rmc-header {
+	padding-bottom: 0px;	
+}
