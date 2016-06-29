@@ -4,7 +4,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 public class MyFileUploadForm {
 
-	// Upload files.
+	// Upload files...
     private CommonsMultipartFile[] fileDatas;
     
     private String massRequestType;
