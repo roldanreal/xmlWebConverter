@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class XMLConverter {
 
-    private String header_handleMassOperation_top= "<HandleMassOperation|~|<?xml version=\"1.0\" encoding=\"UTF-8\"?>";    
+    private String header_handleMassOperation_top= "HandleMassOperation|~|<?xml version=\"1.0\" encoding=\"UTF-8\"?>";    
     private String header_interface="<Interface xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"OmsInterface.xsd\">";
     private String header_handleMassOperation = "<HandleMassOperation>";
     private String header_handleMassOperationRequest = "<HandleMassOperationRequest>";
