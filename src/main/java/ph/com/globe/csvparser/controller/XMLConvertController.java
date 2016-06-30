@@ -76,27 +76,6 @@ public class XMLConvertController {
  
     }
  
-    // GET: Show upload form page.
-    @RequestMapping(value = "/uploadMultiFile", method = RequestMethod.GET)
-    public String uploadMultiFileHandler(Model model) {
- 
-        MyFileUploadForm myUploadForm = new MyFileUploadForm();
-        model.addAttribute("myUploadForm", myUploadForm);
- 
-        // Forward to "/WEB-INF/pages/uploadMultiFile.jsp".
-        return "uploadMultiFile";
-    }
- 
-    // POST: Do Upload
-    @RequestMapping(value = "/uploadMultiFile", method = RequestMethod.POST)
-    public String uploadMultiFileHandlerPOST(HttpServletRequest request, //
-            Model model, //
-            @ModelAttribute("myUploadForm") MyFileUploadForm myUploadForm) {
- 
-        return this.doUpload(request, model, myUploadForm);
- 
-    }
- 
     private String doUpload(HttpServletRequest request, Model model, //
             MyFileUploadForm myUploadForm) {
  
@@ -179,6 +158,8 @@ public class XMLConvertController {
         
         if(massRequestType.equals(MassRequestTypes.REPLACE_OFFER_WITH_BASE_PLAN)) {
         	converter.convertToXML_replaceOfferWithBasePlan(csvSource, downloadPath, fileNameWoExtension);
+        } else if(massRequestType.equals(MassRequestTypes.CHANGE_CONFIGURATION)) {
+        	converter.convertToXML_changeConfiguration(csvSource, downloadPath, fileNameWoExtension);
         }
         
 

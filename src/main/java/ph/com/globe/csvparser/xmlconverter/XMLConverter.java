@@ -283,11 +283,4 @@ public class XMLConverter {
 		//return xmlFile;
 		   
     }//GEN-LAST:event
-
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-//    private javax.swing.JButton convert;
-//    private javax.swing.JTextField fileChosen;
-//    private javax.swing.JButton uploadButton;
-    // End of variables declaration//GEN-END:variables
 }
