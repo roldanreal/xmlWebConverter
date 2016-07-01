@@ -12,7 +12,7 @@
 	
 	<br />
 
-	Conversion done! Yow test test
+	Conversion done!
 	
 	<br />
 	<a href="downloadXMLFile">Click here to download file</a>
