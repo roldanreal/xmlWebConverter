@@ -29,17 +29,12 @@
         	<form:select path="massRequestType">
 			  <option value="replaceOfferWithBasePlan">Replace Offer with Base Plan</option>
 			  <option value="changeConfiguration">Change Configuration</option>
-			  <option value="mercedes">Mercedes</option>
-			  <option value="audi">Audi</option>
 			</form:select>
 			<br/>
 			<br/>
-			<form>
-				<input path="fileDatas" type="file">
-			</form>
-        	<!--<form:input path="fileDatas" type="file" />-->
-		<br />
-		<input type="submit" value="Convert!">
+        	<form:input path="fileDatas" type="file" />
+		<br/>
+		<input class="btn btn-primary btn-md" type="submit" value="Convert!">
 	</form:form>
   	</div>
 </div>
