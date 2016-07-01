@@ -6,13 +6,9 @@
 <title>Upload Result</title>
 </head>
 <body>
-	<!-- 
-		<jsp:include page="_menu.jsp" />
-	-->
-	
 	<br />
 
-	Conversion done! Yow test test
+	Conversion done!
 	
 	<br />
 	<a href="downloadXMLFile">Click here to download file</a>
