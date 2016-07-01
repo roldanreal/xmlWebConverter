@@ -10,7 +10,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
+import ph.com.globe.csvparser.constant.XMLMassRequestHeader;
 
 /**
  *
@@ -49,7 +54,31 @@ public class XMLConverter {
      */
     
 
+    public Map<String, String> getXmlMassRequestHeaders(String[] tags, String[] values) {
+    	
+    	XMLMassRequestHeader headers = new XMLMassRequestHeader();
+    	ArrayList<String> xmlMassRequestHeaders = headers.getXmlMassHeaderList();
+    	Map<String, String> headersMap = new HashMap<String, String>();
+    	
+    	Integer valueIndex = 0;
+    	System.out.println("List of mass request headers: ");
+    	
+    	for(String tag: tags) {
+    		for(String xmlMassRequestHeader: xmlMassRequestHeaders) {
+    			if(tag.equals(xmlMassRequestHeader)) {
+    				System.out.println("header name: " + xmlMassRequestHeader + ", value: " + values[valueIndex]);
+    				headersMap.put(xmlMassRequestHeader, values[valueIndex]);
+    				break;
+    			}
+    		}
+    		valueIndex++;
+    	}
+		return headersMap;
+    	
+    }
+    
     public void convertToXML_changeConfiguration(String csvSource, String destination, String fileName) {//GEN-FIRST:event_convertActionPerformed
+    	XMLConverter converter = new XMLConverter();
     	File xmlFile = null;
     	boolean isHeaderWritten = false;
     	
@@ -68,7 +97,24 @@ public class XMLConverter {
                 while((str = br.readLine())!=null){
                     listStr.add(str);
                 }
+                
+                //Tags are now stored in this array of Strings
                 String[] tags = listStr.get(0).split("\\,");
+                
+                //Get second line of the code and split to get the required values
+                String[] values = listStr.get(1).split("\\,");
+                
+                Map<String, String> xmlMassRequestHeadersMap = converter.getXmlMassRequestHeaders(tags, values);
+                
+                System.out.println("Map size: " + xmlMassRequestHeadersMap.size());
+//                Iterator<Map.Entry<String,String>> iterator = xmlMassRequestHeadersMap.entrySet().iterator();
+////                while(iterator.hasNext()) {
+////                    Map.Entry<String,String> entry = iterator.next();
+////                    System.out.println("\t\t\t\t\t" + entry.getKey() + "=\"" + entry.getValue() +"\"");
+////                    
+////              
+////                }
+//                
                 
                 //Add to the list of values
                 for(int i=1;i<listStr.size();i++){
@@ -96,7 +142,7 @@ public class XMLConverter {
                 	//To avoid repetition of creating headers
                 	if(!isHeaderWritten) {
                 		String[]vals = content.split(",");
-                        int i=0;
+                        //int i=0;
                         //String space="   ";                   
                         writer.append("\t" + header_interface);
                         writer.append("\n");
@@ -105,23 +151,31 @@ public class XMLConverter {
                         writer.append("\t\t\t" + header_handleMassOperationRequest);
                         writer.append("\n");
                         writer.append("\t\t\t\t" + header_massRequestHeader);
-                        writer.append("\n");
-                        for(String tag:tags){
-                        	if(i==3) {
-                        		//get number of request line
-                        		writer.println("\t\t\t\t\t" + tag + "=\"" + vals[i] +"\"");
-                        		writer.println("\t\t\t\t\tnumberOfRequestLines=\"" + listMsisdn.size() +"\"");
-                        	}
-                        	else {
-                        		writer.println("\t\t\t\t\t" + tag + "=\"" + vals[i] +"\"");
-                        	}
-                        	i++;
-                        	
-                            if(i==6) {
-                            	writer.append("\t\t\t\t>" + footer_massRequestHeader);
-                            	break;
-                            }
+                        //writer.append("\n\t\t\t\t");
+                        
+                        //Add MassRequestHeader parameters
+                        Iterator<Map.Entry<String,String>> iterator = xmlMassRequestHeadersMap.entrySet().iterator();
+                        while(iterator.hasNext()) {
+                            Map.Entry<String,String> entry = iterator.next();
+                            writer.append(" " + entry.getKey() + "=\"" + entry.getValue() +"\"");
                         }
+                        writer.append("/>");
+//                        for(String tag:tags){
+//                        	if(i==3) {
+//                        		//get number of request line
+//                        		writer.println("\t\t\t\t\t" + tag + "=\"" + vals[i] +"\"");
+//                        		writer.println("\t\t\t\t\tnumberOfRequestLines=\"" + listMsisdn.size() +"\"");
+//                        	}
+//                        	else {
+//                        		writer.println("\t\t\t\t\t" + tag + "=\"" + vals[i] +"\"");
+//                        	}
+//                        	i++;
+//                        	
+//                            if(i==6) {
+//                            	writer.append("\t\t\t\t>" + footer_massRequestHeader);
+//                            	break;
+//                            }
+//                        }
                         writer.append("\n\t\t\t\t" + header_massRequestDetails + " " + tags[6]  + "=\"" + vals[6] +"\">");
                         writer.append("\n\t\t\t\t\t" + header_optionalConfigurationItem + " " + tags[7]  + "=\"" + vals[7] +"\">");
                         writer.append("\n");

@@ -10,6 +10,7 @@ package ph.com.globe.csvparser.xmlpart;
 public class MassRequestHeader {
 	private String externalMassRequestID;
 	private String massRequestType;
+	private String requestDescription;
 	private String requestCreator;
 	private String requestCreationDate;
 	private String numberOfRequestLines;
@@ -27,6 +28,12 @@ public class MassRequestHeader {
 	}
 	public void setMassRequestType(String massRequestType) {
 		this.massRequestType = massRequestType;
+	}
+	public String getRequestDescription() {
+		return requestDescription;
+	}
+	public void setRequestDescription(String requestDescription) {
+		this.requestDescription = requestDescription;
 	}
 	public String getRequestCreator() {
 		return requestCreator;
