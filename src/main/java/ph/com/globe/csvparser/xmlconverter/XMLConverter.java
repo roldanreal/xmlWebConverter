@@ -91,8 +91,8 @@ public class XMLConverter {
             	requestCreationDt = xmlMassRequestHeadersMap.get("requestCreationDate");
             	requestExecutionDt = xmlMassRequestHeadersMap.get("requestExecutionDate");
             	dateFormat = xmlMassRequestHeadersMap.get("dateFormat");
-            	lockInStart = xmlMassRequestHeadersMap.get("LOCK_IN_START_DATE");
-            	lockInEnd = xmlMassRequestHeadersMap.get("LOCK_IN_END_DATE");
+            	lockInStart = xmlOptionalConfigurationProperty.get("LOCK_IN_START_DATE");
+            	lockInEnd = xmlOptionalConfigurationProperty.get("LOCK_IN_END_DATE");
             	System.out.println("Request creation date: " + requestCreationDt);
             	System.out.println("Request requestExecutionDate : " + requestExecutionDt);
             	System.out.println("Request dateFormat: " + dateFormat);
@@ -146,7 +146,7 @@ public class XMLConverter {
                 	lockInEndDate = convertStringToDate(dateFormat, lockInEnd);
                 	
                 	 if(lockInStartDate.compareTo(lockInEndDate)>0){
-                         errorMsg = errorMsg.concat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lock In Start Date is greater than Lock In End Date");
+                         errorMsg = errorMsg.concat("Lock In Start Date is greater than Lock In End Date");
                      }
                 }
             	//ends here
@@ -272,8 +272,8 @@ public class XMLConverter {
             	requestCreationDt = xmlMassRequestHeadersMap.get("requestCreationDate");
             	requestExecutionDt = xmlMassRequestHeadersMap.get("requestExecutionDate");
             	dateFormat = xmlMassRequestHeadersMap.get("dateFormat");
-            	lockInStart = xmlMassRequestHeadersMap.get("LOCK_IN_START_DATE");
-            	lockInEnd = xmlMassRequestHeadersMap.get("LOCK_IN_END_DATE");
+            	lockInStart = xmlOptionalConfigurationProperty.get("LOCK_IN_START_DATE");
+            	lockInEnd = xmlOptionalConfigurationProperty.get("LOCK_IN_END_DATE");
             	System.out.println("Request creation date: " + requestCreationDt);
             	System.out.println("Request requestExecutionDate : " + requestExecutionDt);
             	System.out.println("Request dateFormat: " + dateFormat);
@@ -297,18 +297,20 @@ public class XMLConverter {
             		}
             		if(lockInStart!=null) {
                       if(!isValidDateFormat(dateFormat,lockInStart)){
-                    	errorMsg = errorMsg.concat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Invalid lock in start date format. <br/>");
+                    	errorMsg = errorMsg.concat("Invalid lock in start date format. <br/>");
                       }else{
                     	  isLockInStartDateValid = true;
                       }
             		}
+            		if(lockInEnd!=null) {
+                        if(!isValidDateFormat(dateFormat,lockInEnd)){
+                      	errorMsg = errorMsg.concat("Invalid lock in end date format. <br/>");
+                        }else{
+                      	  isLockInStartDateValid = true;
+                        }
+              		}
+            		
             	}
-
-                if(isValidDateFormat(dateFormat,lockInEnd)== false){
-                	errorMsg = errorMsg.concat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Invalid lock in end date format. <br/>");
-                }else{
-                	isLockInEndDateValid = true;
-                }
                 
                 if(isCreationDtValid && isExecutionDtValid){
                 	creationDate = convertStringToDate(dateFormat, requestCreationDt);
