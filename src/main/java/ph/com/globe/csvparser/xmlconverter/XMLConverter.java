@@ -39,6 +39,10 @@ public class XMLConverter {
     private Date lockInEndDate;
     private Boolean isLockInStartDateValid = false;
     private Boolean isLockInEndDateValid = false;
+    private String externalMassReqId;
+    private String massReqType;  
+    private String reqCreator;
+   
     
     public String convertToXML_changeConfiguration(String csvSource, String destination, String fileName) {//GEN-FIRST:event_convertActionPerformed
     	XMLPartUtil util = new XMLPartUtil();
@@ -87,18 +91,25 @@ public class XMLConverter {
                 Map<String, String> xmlDynamicPropertyMap = util.getXMLDynamicProperty(tags, values);
                 
               //here
-            	Iterator<Map.Entry<String,String>> iterator = xmlMassRequestHeadersMap.entrySet().iterator();
+            	externalMassReqId = xmlMassRequestHeadersMap.get("externalMassRequestID");
+            	massReqType = xmlMassRequestHeadersMap.get("massRequestType");
+            	reqCreator = xmlMassRequestHeadersMap.get("requestCreator");
             	requestCreationDt = xmlMassRequestHeadersMap.get("requestCreationDate");
             	requestExecutionDt = xmlMassRequestHeadersMap.get("requestExecutionDate");
             	dateFormat = xmlMassRequestHeadersMap.get("dateFormat");
             	lockInStart = xmlOptionalConfigurationProperty.get("LOCK_IN_START_DATE");
             	lockInEnd = xmlOptionalConfigurationProperty.get("LOCK_IN_END_DATE");
-            	System.out.println("Request creation date: " + requestCreationDt);
-            	System.out.println("Request requestExecutionDate : " + requestExecutionDt);
-            	System.out.println("Request dateFormat: " + dateFormat);
-            	System.out.println("Request lockInStart: " + lockInStart);
-            	System.out.println("Request lockInEnd: " + lockInEnd);
             	
+            	if(externalMassReqId == null){
+            		errorMsg = errorMsg.concat("External mass request ID is required. <br/>");
+            	}
+            	if(massReqType == null){
+            		errorMsg = errorMsg.concat("Mass request type is required. <br/>");
+            	}
+            	
+            	if (reqCreator == null){
+            		errorMsg = errorMsg.concat("Request Creator is required. <br/>");
+            	}
             	if(dateFormat!=null) {
             		if (requestCreationDt!=null) {
             			if(!isValidDateFormat(dateFormat, requestCreationDt)){
@@ -268,17 +279,25 @@ public class XMLConverter {
                 Map<String, String> xmlDynamicPropertyMap = util.getXMLDynamicProperty(tags, values);
                 
                 //here
-            	Iterator<Map.Entry<String,String>> iterator = xmlMassRequestHeadersMap.entrySet().iterator();
+                externalMassReqId = xmlMassRequestHeadersMap.get("externalMassRequestID");
+            	massReqType = xmlMassRequestHeadersMap.get("massRequestType");
+            	reqCreator = xmlMassRequestHeadersMap.get("requestCreator");
             	requestCreationDt = xmlMassRequestHeadersMap.get("requestCreationDate");
             	requestExecutionDt = xmlMassRequestHeadersMap.get("requestExecutionDate");
             	dateFormat = xmlMassRequestHeadersMap.get("dateFormat");
             	lockInStart = xmlOptionalConfigurationProperty.get("LOCK_IN_START_DATE");
             	lockInEnd = xmlOptionalConfigurationProperty.get("LOCK_IN_END_DATE");
-            	System.out.println("Request creation date: " + requestCreationDt);
-            	System.out.println("Request requestExecutionDate : " + requestExecutionDt);
-            	System.out.println("Request dateFormat: " + dateFormat);
-            	System.out.println("Request lockInStart: " + lockInStart);
-            	System.out.println("Request lockInEnd: " + lockInEnd);
+            	
+            	if(externalMassReqId == null){
+            		errorMsg = errorMsg.concat("External mass request ID is required. <br/>");
+            	}
+            	if(massReqType == null){
+            		errorMsg = errorMsg.concat("Mass request type is required. <br/>");
+            	}
+            	
+            	if (reqCreator == null){
+            		errorMsg = errorMsg.concat("Request Creator is required. <br/>");
+            	}
             	
             	if(dateFormat!=null) {
             		if (requestCreationDt!=null) {
@@ -306,7 +325,7 @@ public class XMLConverter {
                         if(!isValidDateFormat(dateFormat,lockInEnd)){
                       	errorMsg = errorMsg.concat("Invalid lock in end date format. <br/>");
                         }else{
-                      	  isLockInStartDateValid = true;
+                      	  isLockInEndDateValid = true;
                         }
               		}
             		
@@ -326,7 +345,7 @@ public class XMLConverter {
                 	lockInEndDate = convertStringToDate(dateFormat, lockInEnd);
                 	
                 	 if(lockInStartDate.compareTo(lockInEndDate)>0){
-                         errorMsg = errorMsg.concat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lock In Start Date is greater than Lock In End Date");
+                         errorMsg = errorMsg.concat("Lock In Start Date is greater than Lock In End Date");
                      }
                 }
             	//ends here
