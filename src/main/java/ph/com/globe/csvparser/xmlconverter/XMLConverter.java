@@ -9,7 +9,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -21,11 +25,28 @@ import ph.com.globe.csvparser.util.XMLPartUtil;
  * 
  */
 public class XMLConverter {
+
+    private String requestCreationDt;
+    private String requestExecutionDt;
+    private String dateFormat;
+    private Date creationDate;
+    private Date executionDate;
+    private Boolean isCreationDtValid;
+    private Boolean isExecutionDtValid;
+    private String lockInStart;
+    private String lockInEnd;
+    private Date lockInStartDate;
+    private Date lockInEndDate;
+    private Boolean isLockInStartDateValid;
+    private Boolean isLockInEndDateValid;
     
-    public void convertToXML_changeConfiguration(String csvSource, String destination, String fileName) {//GEN-FIRST:event_convertActionPerformed
+    public String convertToXML_changeConfiguration(String csvSource, String destination, String fileName) {//GEN-FIRST:event_convertActionPerformed
     	XMLPartUtil util = new XMLPartUtil();
-    	File xmlFile = null;
+    	//File xmlFile = null;
+    	String errorMsg = "";
     	
+    	System.out.println("File destination: " + destination);
+
         try {
             if(fileName!=null){
                 File excelFile = new File(csvSource);
@@ -39,9 +60,6 @@ public class XMLConverter {
                 while((str = br.readLine())!=null){
                     listStr.add(str);
                 }
-                
-                //close reader
-                br.close();
                 
                 //Tags are now stored in this array of Strings
                 String[] tags = listStr.get(0).split("\\,");
@@ -68,8 +86,72 @@ public class XMLConverter {
                 Map<String, String> xmlOptionalConfigurationProperty = util.getXMLOptionalConfigurationProperty(tags, values);
                 Map<String, String> xmlDynamicPropertyMap = util.getXMLDynamicProperty(tags, values);
                 
-                xmlFile = new File(destination);
+              //here
+            	Iterator<Map.Entry<String,String>> iterator = xmlMassRequestHeadersMap.entrySet().iterator();
+                while(iterator.hasNext()) {
+                    Map.Entry<String,String> entry = iterator.next();
+                    //writer.append(" " + entry.getKey() + "=\"" + entry.getValue() +"\"");
+                    if(entry.getKey().equals("requestCreationDate") && entry.getValue() !=null){
+                    	requestCreationDt =  entry.getValue();
+                    }
+                    if(entry.getKey().equals("requestExecutionDate") && entry.getValue()!=null){
+                    	requestExecutionDt = entry.getValue();
+                    }
+                    if(entry.getKey().equals("dateFormat") && entry.getValue()!=null){
+                    	dateFormat = entry.getValue();
+                    }
+                    if(entry.getKey().equals("LOCK_IN_START_DATE") && entry.getValue()!=null){
+                    	lockInStart = entry.getValue();
+                    }
+                    if(entry.getKey().equals("LOCK_IN_END_DATE") && entry.getValue()!=null){
+                    	lockInEnd = entry.getValue();
+                    }
+                   
+                }
+                if(isValidDateFormat(dateFormat, requestCreationDt) == false){
+                	errorMsg = errorMsg.concat("Invalid request creation date format. <br/>");
+                }else{
+                	isCreationDtValid = true;
+                }
+             
+                if(isValidDateFormat(dateFormat,requestExecutionDt)== false){
+                	errorMsg = errorMsg.concat("Invalid request execution date format. <br/>");
+                }else{
+                	isExecutionDtValid = true;
+                }
+                /*if(isValidDateFormat(dateFormat,lockInStart)== false){
+                	errorMsg = errorMsg.concat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Invalid lock in start date format. <br/>");
+                }else{
+                	isLockInStartDateValid = true;
+                }
+                if(isValidDateFormat(dateFormat,lockInEnd)== false){
+                	errorMsg = errorMsg.concat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Invalid lock in end date format. <br/>");
+                }else{
+                	isLockInEndDateValid = true;
+                }*/
+                
+                if(isCreationDtValid && isExecutionDtValid){
+                	creationDate = convertStringToDate(dateFormat, requestCreationDt);
+                	executionDate = convertStringToDate(dateFormat, requestExecutionDt);
+                	
+                	 if(creationDate.compareTo(executionDate)>0){
+                         errorMsg = errorMsg.concat("Request Creation Date is greater than Request Execution Date.");
+                     }
+                }
+                
+                /*if(isLockInStartDateValid && isLockInEndDateValid){
+                    lockInStartDate = convertStringToDate(dateFormat, lockInStart);
+                	lockInEndDate = convertStringToDate(dateFormat, lockInEnd);
+                	
+                	 if(lockInStartDate.compareTo(lockInEndDate)>0){
+                         errorMsg = errorMsg.concat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Lock In Start Date is greater than Lock In End Date");
+                     }
+                }*/
+            	//ends here
+                System.out.println("file destination: " + destination);
+                File xmlFile = new File(destination);
                 xmlFile.createNewFile();
+                
                 PrintWriter writer = new PrintWriter(xmlFile);
                 writer.append(XMLTags.header_handleMassOperation_top);
                 writer.append("\n");
@@ -122,6 +204,9 @@ public class XMLConverter {
                 
                 writer.append(XMLTags.footer_context);
                 
+                //close reader
+                br.close();
+                
                 //close writer
                 writer.close();
                
@@ -129,6 +214,7 @@ public class XMLConverter {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return errorMsg;
 		//return xmlFile;
 		   
     }//GEN-LAST:event_convertActionPerformed
@@ -242,4 +328,37 @@ public class XMLConverter {
 		//return xmlFile;
 		   
     }//GEN-LAST:event
+    
+    public static boolean isValidDateFormat(String format, String value) {
+    	
+        Date date = null;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
+            date = sdf.parse(value);           
+            if (!value.equals(sdf.format(date))) {
+                date = null;
+            }
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+        if (date !=null){
+            return true;
+        }else{
+        	return false;        	
+        }
+        
+    }
+    
+    public static Date convertStringToDate(String format, String value){
+    	Date date = null;
+    	try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format);
+            date = sdf.parse(value);
+                  
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+		return date;
+    	
+    }
 }

@@ -38,6 +38,7 @@ public class XMLConvertController {
 	
 	private String clientFileName = null;
 	private static String downloadPath = null;
+	private String result = null;
    
     @InitBinder
     public void myInitBinder(WebDataBinder dataBinder) {
@@ -80,7 +81,7 @@ public class XMLConvertController {
             MyFileUploadForm myUploadForm) {
  
     	String massRequestType = myUploadForm.getMassRequestType();
-    	//System.out.println("Mass request type: " + myUploadForm.getMassRequestType());
+    	System.out.println("Mass request type: " + massRequestType);
         String uploadRootPath = request.getServletContext().getRealPath("upload");
         System.out.println("uploadRootPath=" + uploadRootPath);
  
@@ -122,14 +123,22 @@ public class XMLConvertController {
         String src = uploadRootPath + "\\" + clientFileName;
         
         //call the method
-        convertToXML(request, model, src, clientFileName, massRequestType);
+        String errorMsg = convertToXML(request, model, src, clientFileName, massRequestType);
         
+        model.addAttribute("errorMessage", errorMsg);
         
-        return "uploadResult";
+        if(errorMsg.isEmpty()){
+        	result = "uploadResult";
+        }else{
+        	result = "uploadError";
+        }
+     
+		return result;        
     }
     
-    private void convertToXML(HttpServletRequest request, Model model,
+    private String convertToXML(HttpServletRequest request, Model model,
     		String csvSource, String fileName, String massRequestType) {
+    	String errorMsg = "";
     	XMLConverter converter = new XMLConverter();
     	
     	System.out.println("MASS REQUEST TYPE AGAIN: " + massRequestType);
@@ -156,12 +165,14 @@ public class XMLConvertController {
         downloadPath = targetRootPath+File.separatorChar+fileNameWoExtension+".xml";
         System.out.println("Path: " + downloadPath);
         
+        System.out.println("Mass request type: " + massRequestType);
+        
         if(massRequestType.equals(MassRequestTypes.REPLACE_OFFER_WITH_BASE_PLAN)) {
         	converter.convertToXML_replaceOfferWithBasePlan(csvSource, downloadPath, fileNameWoExtension);
         } else if(massRequestType.equals(MassRequestTypes.CHANGE_CONFIGURATION)) {
-        	converter.convertToXML_changeConfiguration(csvSource, downloadPath, fileNameWoExtension);
+        	errorMsg = converter.convertToXML_changeConfiguration(csvSource, downloadPath, fileNameWoExtension);
         }
-        
+        return errorMsg;
 
     }
     

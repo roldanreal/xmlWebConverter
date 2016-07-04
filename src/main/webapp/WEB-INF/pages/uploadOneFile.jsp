@@ -15,7 +15,7 @@
 <!-- custom resources -->
 <link href="resources/css/main.css" rel="stylesheet">
 <script src="resources/js/main.js"></script>
-     
+
 </head>
 <img src="resources/images/globe-logo.jpg" alt="Globe Logo" style="width:250px;height:100px;">
 <body class="container">
@@ -25,16 +25,16 @@
   	</div>
   	<div class="row">
         <form:form modelAttribute="myUploadForm" method="POST" action="" enctype="multipart/form-data">        
-        <b style="color:#191970;font-size:100%">Mass Request Type:</b>
-        	<form:select path="massRequestType">
-			  <option value="replaceOfferWithBasePlan">Replace Offer with Base Plan</option>
-			  <option value="changeConfiguration">Change Configuration</option>
-			</form:select>
+	        <b style="color:#191970;font-size:100%">Mass Request Type:</b>
+	        	<form:select path="massRequestType">
+				  <option value="ReplaceOfferWithBasePlan">Replace Offer with Base Plan</option>
+				  <option value="ChangeConfiguration">Change Configuration</option>
+				</form:select>
+				<br/>
+				<br/>
+	        	<form:input path="fileDatas" type="file" />
 			<br/>
-			<br/>
-        	<form:input path="fileDatas" type="file" />
-		<br/>
-		<input class="btn btn-primary btn-md" type="submit" value="Convert!">
+			<input class="btn btn-primary btn-md" type="submit" value="Convert!">
 	</form:form>
   	</div>
 </div>

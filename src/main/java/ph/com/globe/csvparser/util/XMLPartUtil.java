@@ -1,8 +1,12 @@
 package ph.com.globe.csvparser.util;
 
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import ph.com.globe.csvparser.constant.MassRequestTypes;
@@ -20,7 +24,7 @@ import ph.com.globe.csvparser.constant.XMLMassRequestHeader;
  *
  */
 public class XMLPartUtil {
-	
+		    
 	public Map<String, String> getXmlMassRequestHeaders(String[] tags, String[] values, Integer requestLineSize) {
     	XMLMassRequestHeader headers = new XMLMassRequestHeader();
     	ArrayList<String> xmlMassRequestHeadersList = headers.getXmlMassHeaderList();
@@ -29,7 +33,6 @@ public class XMLPartUtil {
     	
     	Integer valueIndex = 0;
     	String requestDescription = null;
-    	
     	for(String tag: tags) {
     		for(String xmlMassRequestHeader: xmlMassRequestHeadersList) {
     			if(tag.equals(xmlMassRequestHeader)) {
@@ -48,7 +51,10 @@ public class XMLPartUtil {
     	
     	if(requestDescription!=null) {
     		headersMap.put("requestDescription", requestDescription);
+    		
     	}
+    	
+    	
 		return headersMap;
     	
     }
@@ -194,5 +200,6 @@ public class XMLPartUtil {
         	}
         }
     }
+	
 	
 }
