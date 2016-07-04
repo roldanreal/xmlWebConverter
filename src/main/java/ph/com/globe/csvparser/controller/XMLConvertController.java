@@ -168,7 +168,7 @@ public class XMLConvertController {
         System.out.println("Mass request type: " + massRequestType);
         
         if(massRequestType.equals(MassRequestTypes.REPLACE_OFFER_WITH_BASE_PLAN)) {
-        	converter.convertToXML_replaceOfferWithBasePlan(csvSource, downloadPath, fileNameWoExtension);
+        	errorMsg = converter.convertToXML_replaceOfferWithBasePlan(csvSource, downloadPath, fileNameWoExtension);
         } else if(massRequestType.equals(MassRequestTypes.CHANGE_CONFIGURATION)) {
         	errorMsg = converter.convertToXML_changeConfiguration(csvSource, downloadPath, fileNameWoExtension);
         }

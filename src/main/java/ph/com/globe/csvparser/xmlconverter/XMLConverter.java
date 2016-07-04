@@ -100,14 +100,14 @@ public class XMLConverter {
             	lockInStart = xmlOptionalConfigurationProperty.get("LOCK_IN_START_DATE");
             	lockInEnd = xmlOptionalConfigurationProperty.get("LOCK_IN_END_DATE");
             	
-            	if(externalMassReqId == null){
+            	if(externalMassReqId == null || externalMassReqId.isEmpty()){
             		errorMsg = errorMsg.concat("External mass request ID is required. <br/>");
             	}
-            	if(massReqType == null){
+            	if(massReqType == null || massReqType.isEmpty() ){
             		errorMsg = errorMsg.concat("Mass request type is required. <br/>");
             	}
             	
-            	if (reqCreator == null){
+            	if (reqCreator == null || reqCreator.isEmpty()){
             		errorMsg = errorMsg.concat("Request Creator is required. <br/>");
             	}
             	if(dateFormat!=null) {
@@ -233,7 +233,7 @@ public class XMLConverter {
     }//GEN-LAST:event_convertActionPerformed
     
     
-    public void convertToXML_replaceOfferWithBasePlan(String csvSource, String destination, String fileName) {//GEN-FIRST:event_convertActionPerformed
+    public String convertToXML_replaceOfferWithBasePlan(String csvSource, String destination, String fileName) {//GEN-FIRST:event_convertActionPerformed
     	XMLPartUtil util = new XMLPartUtil();
     	File xmlFile = null;
     	String errorMsg = "";
@@ -288,14 +288,14 @@ public class XMLConverter {
             	lockInStart = xmlOptionalConfigurationProperty.get("LOCK_IN_START_DATE");
             	lockInEnd = xmlOptionalConfigurationProperty.get("LOCK_IN_END_DATE");
             	
-            	if(externalMassReqId == null){
+            	if(externalMassReqId == null || externalMassReqId.isEmpty()){
             		errorMsg = errorMsg.concat("External mass request ID is required. <br/>");
             	}
-            	if(massReqType == null){
+            	if(massReqType == null || massReqType.isEmpty() ){
             		errorMsg = errorMsg.concat("Mass request type is required. <br/>");
             	}
             	
-            	if (reqCreator == null){
+            	if (reqCreator == null || reqCreator.isEmpty()){
             		errorMsg = errorMsg.concat("Request Creator is required. <br/>");
             	}
             	
@@ -409,6 +409,7 @@ public class XMLConverter {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return errorMsg;
 		//return xmlFile;
 		   
     }//GEN-LAST:event
