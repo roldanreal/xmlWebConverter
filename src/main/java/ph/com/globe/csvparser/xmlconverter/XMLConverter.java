@@ -31,14 +31,14 @@ public class XMLConverter {
     private String dateFormat;
     private Date creationDate;
     private Date executionDate;
-    private Boolean isCreationDtValid;
-    private Boolean isExecutionDtValid;
+    private Boolean isCreationDtValid = false;
+    private Boolean isExecutionDtValid = false;
     private String lockInStart;
     private String lockInEnd;
     private Date lockInStartDate;
     private Date lockInEndDate;
-    private Boolean isLockInStartDateValid;
-    private Boolean isLockInEndDateValid;
+    private Boolean isLockInStartDateValid = false;
+    private Boolean isLockInEndDateValid = false;
     
     public String convertToXML_changeConfiguration(String csvSource, String destination, String fileName) {//GEN-FIRST:event_convertActionPerformed
     	XMLPartUtil util = new XMLPartUtil();
@@ -116,18 +116,21 @@ public class XMLConverter {
             		}
             		if(lockInStart!=null) {
                       if(!isValidDateFormat(dateFormat,lockInStart)){
-                    	errorMsg = errorMsg.concat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Invalid lock in start date format. <br/>");
+                    	errorMsg = errorMsg.concat("Invalid lock in start date format. <br/>");
                       }else{
                     	  isLockInStartDateValid = true;
                       }
             		}
+            		if(lockInEnd!=null) {
+                        if(!isValidDateFormat(dateFormat,lockInEnd)){
+                      	errorMsg = errorMsg.concat("Invalid lock in end date format. <br/>");
+                        }else{
+                        	isLockInEndDateValid = true;
+                        }
+              		}
             	}
 
-                if(isValidDateFormat(dateFormat,lockInEnd)== false){
-                	errorMsg = errorMsg.concat("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Invalid lock in end date format. <br/>");
-                }else{
-                	isLockInEndDateValid = true;
-                }
+                
                 
                 if(isCreationDtValid && isExecutionDtValid){
                 	creationDate = convertStringToDate(dateFormat, requestCreationDt);
