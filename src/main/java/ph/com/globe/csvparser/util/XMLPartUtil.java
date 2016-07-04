@@ -165,7 +165,7 @@ public class XMLPartUtil {
         	String value = xmlOptionalConfigurationProperty.get(headerName);
         	if(value != null) {
         		 writer.append("\n");
-                 writer.append("\t\t\t\t\t\t" + XMLTags.header_optionalConfigurationProperty + " value=\"" + value +"\"" + " type=\"" + headerName   + "\"/>");
+                 writer.append("\t\t\t\t\t\t" + XMLTags.header_optionalConfigurationProperty  + " propertyName=\"" + headerName   + "\"" + " propertyValue=\"" + value +"\"/>");
         	}
         }
     }
