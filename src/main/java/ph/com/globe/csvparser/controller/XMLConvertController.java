@@ -57,7 +57,7 @@ public class XMLConvertController {
     }
  
     // GET: Show upload form page.
-    @RequestMapping(value = "/uploadOneFile", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public String uploadOneFileHandler(Model model) {
  
         MyFileUploadForm myUploadForm = new MyFileUploadForm();
@@ -68,7 +68,7 @@ public class XMLConvertController {
     }
  
     // POST: Do Upload
-    @RequestMapping(value = "/uploadOneFile", method = RequestMethod.POST)
+    @RequestMapping(value = "/", method = RequestMethod.POST)
     public String uploadOneFileHandlerPOST(HttpServletRequest request, //
             Model model, //
             @ModelAttribute("myUploadForm") MyFileUploadForm myUploadForm) {

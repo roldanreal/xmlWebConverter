@@ -203,7 +203,7 @@ public class XMLConverter {
                 	writer.append("\n");
                 	writer.append("\t\t\t\t" +  XMLTags.header_massLineInfo + " requestLineNumber=\"" + (j+1) + "\">");
                 	writer.append("\n");
-                	writer.append("\t\t\t\t\t" +  XMLTags.header_idElement + " value=\"" + listMsisdn.get(j) + "\" type=\"" + tags[tags.length-1] + "\">");
+                	writer.append("\t\t\t\t\t" +  XMLTags.header_idElement + " value=\"" + listMsisdn.get(j) + "\" type=\"" + tags[tags.length-1] + "\"/>");
                 	writer.append("\n");
                 	writer.append("\t\t\t\t" +  XMLTags.footer_massLineInfo);
                 }
@@ -389,7 +389,7 @@ public class XMLConverter {
                 	writer.append("\n");
                 	writer.append("\t\t\t\t" +  XMLTags.header_massLineInfo + " requestLineNumber=\"" + (j+1) + "\">");
                 	writer.append("\n");
-                	writer.append("\t\t\t\t\t" +  XMLTags.header_idElement + " value=\"" + listMsisdn.get(j) + "\" type=\"" + tags[tags.length-1] + "\">");
+                	writer.append("\t\t\t\t\t" +  XMLTags.header_idElement + " value=\"" + listMsisdn.get(j) + "\" type=\"" + tags[tags.length-1] + "\"/>");
                 	writer.append("\n");
                 	writer.append("\t\t\t\t" +  XMLTags.footer_massLineInfo);
                 }
