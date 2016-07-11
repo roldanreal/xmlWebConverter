@@ -163,48 +163,39 @@ public class XMLConverter {
     	XMLPartUtil util = new XMLPartUtil();
     	String errorMsg = "";
         try {
-            if(fileName!=null){
+        	if(fileName!=null){
                 File excelFile = new File(csvSource);
                 BufferedReader br = new BufferedReader(new FileReader(excelFile));
                 String str;
                 List<String> listStr = new ArrayList<String>();
                 List<String> listValue = new ArrayList<String>();
                 
-                //List of MSISDNs
-                List<String> listMsisdn = new ArrayList<String>();
                 while((str = br.readLine())!=null){
                     listStr.add(str);
                 }
                 
-                //close reader
+                //close buffered reader
                 br.close();
                 
+                //Tags are now stored in this array of Strings
                 String[] tags = listStr.get(0).split("\\,");
                 
                 //Get second line of the code and split to get the required values
                 String[] values = listStr.get(1).split("\\,");
-                
+
                 //Add to the list of values
                 for(int i=1;i<listStr.size();i++){
                     listValue.add(listStr.get(i));               	
                 }
  
-                //List of MSISDNs
-                for (String value: listValue) {
-                	String msisdnValue = value.split("\\,")[(value.split("\\,").length)-1];
-                	//Add MSISDN to the arraylist
-                	if(msisdnValue != null)
-                		listMsisdn.add(msisdnValue);
-                }
-                
-                Map<String, String> xmlMassRequestHeadersMap = util.getXmlMassRequestHeaders(tags, values, listMsisdn.size());
+                Map<String, String> xmlMassRequestHeadersMap = util.getXmlMassRequestHeaders(tags, values, listValue.size());
                 Map<String, String> xmlMassRequestDetailsMap = util.getXmlMassRequestDetails(tags, values); 
                 Map<String, String> xmlSubProductIDElementMap = util.getXMLSubProductIDElement(tags, values);
                 Map<String, String> xmlOptionalConfigurationProperty = util.getXMLOptionalConfigurationProperty(tags, values);
                 Map<String, String> xmlDynamicPropertyMap = util.getXMLDynamicProperty(tags, values);
-                Map<String, ArrayList<String>> xmlIdElementMap = util.getXMLIdElementsMap(tags, listStr);
+                Map<String, ArrayList<String>> xmlIdElementMap = util.getXMLIdElementsMap(tags, listValue);
                 
-                externalMassReqId = xmlMassRequestHeadersMap.get("externalMassRequestID");
+            	externalMassReqId = xmlMassRequestHeadersMap.get("externalMassRequestID");
             	massReqType = xmlMassRequestHeadersMap.get("massRequestType");
             	reqCreator = xmlMassRequestHeadersMap.get("requestCreator");
             	requestCreationDt = xmlMassRequestHeadersMap.get("requestCreationDate");
@@ -223,7 +214,6 @@ public class XMLConverter {
             	if (reqCreator == null || reqCreator.isEmpty()){
             		errorMsg = errorMsg.concat("Request Creator is required. <br/>");
             	}
-            	
             	if(dateFormat!=null) {
             		if (requestCreationDt!=null) {
             			if(!Utilities.isValidDateFormat(dateFormat, requestCreationDt)){
@@ -250,12 +240,11 @@ public class XMLConverter {
                         if(!Utilities.isValidDateFormat(dateFormat,lockInEnd)){
                       	errorMsg = errorMsg.concat("Invalid lock in end date format. <br/>");
                         }else{
-                      	  isLockInEndDateValid = true;
+                        	isLockInEndDateValid = true;
                         }
               		}
-            		
             	}
-                
+
                 if(isCreationDtValid && isExecutionDtValid){
                 	creationDate = Utilities.convertStringToDate(dateFormat, requestCreationDt);
                 	executionDate = Utilities.convertStringToDate(dateFormat, requestExecutionDt);
@@ -273,12 +262,14 @@ public class XMLConverter {
                          errorMsg = errorMsg.concat("Lock In Start Date is greater than Lock In End Date");
                      }
                 }
+                
                 //Create output file
                 File xmlFile = new File(destination);
         		xmlFile.createNewFile();
         		
         		//write to created file
                 util.printXML(xmlFile, xmlMassRequestHeadersMap, xmlMassRequestDetailsMap, xmlSubProductIDElementMap, xmlOptionalConfigurationProperty, xmlDynamicPropertyMap, xmlIdElementMap);
+               
             }
         } catch (Exception e) {
             e.printStackTrace();
