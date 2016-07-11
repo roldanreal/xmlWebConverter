@@ -38,6 +38,7 @@ public class XMLConverter {
     private String externalMassReqId;
     private String massReqType;  
     private String reqCreator;
+    private Boolean isChangeConfig = false;
    
     
     public String convertToXML_changeConfiguration(String csvSource, String destination, String fileName) {//GEN-FIRST:event_convertActionPerformed
@@ -82,68 +83,13 @@ public class XMLConverter {
             	requestCreationDt = xmlMassRequestHeadersMap.get("requestCreationDate");
             	requestExecutionDt = xmlMassRequestHeadersMap.get("requestExecutionDate");
             	dateFormat = xmlMassRequestHeadersMap.get("dateFormat");
-            	lockInStart = xmlOptionalConfigurationProperty.get("LOCK_IN_START_DATE");
-            	lockInEnd = xmlOptionalConfigurationProperty.get("LOCK_IN_END_DATE");
+            	lockInStart = xmlOptionalConfigurationProperty.get("Lock_In_Start_Date");
+            	lockInEnd = xmlOptionalConfigurationProperty.get("Lock_In_End_Date");
+            	isChangeConfig = true;
             	
-            	if(externalMassReqId == null || externalMassReqId.isEmpty()){
-            		errorMsg = errorMsg.concat("External mass request ID is required. <br/>");
-            	}
-            	if(massReqType == null || massReqType.isEmpty() ){
-            		errorMsg = errorMsg.concat("Mass request type is required. <br/>");
-            	}
-            	
-            	if (reqCreator == null || reqCreator.isEmpty()){
-            		errorMsg = errorMsg.concat("Request Creator is required. <br/>");
-            	}
-            	if(dateFormat!=null) {
-            		if (requestCreationDt!=null) {
-            			if(!Utilities.isValidDateFormat(dateFormat, requestCreationDt)){
-                        	errorMsg = errorMsg.concat("Invalid request creation date format. <br/>");
-                        }else{
-                        	isCreationDtValid = true;
-                        }
-            		}
-            		if(requestExecutionDt!=null) {
-                        if(!Utilities.isValidDateFormat(dateFormat,requestExecutionDt)){
-                        	errorMsg = errorMsg.concat("Invalid request execution date format. <br/>");
-                        }else{
-                        	isExecutionDtValid = true;
-                        }
-            		}
-            		if(lockInStart!=null) {
-                      if(!Utilities.isValidDateFormat(dateFormat,lockInStart)){
-                    	errorMsg = errorMsg.concat("Invalid lock in start date format. <br/>");
-                      }else{
-                    	  isLockInStartDateValid = true;
-                      }
-            		}
-            		if(lockInEnd!=null) {
-                        if(!Utilities.isValidDateFormat(dateFormat,lockInEnd)){
-                      	errorMsg = errorMsg.concat("Invalid lock in end date format. <br/>");
-                        }else{
-                        	isLockInEndDateValid = true;
-                        }
-              		}
-            	}
-
-                if(isCreationDtValid && isExecutionDtValid){
-                	creationDate = Utilities.convertStringToDate(dateFormat, requestCreationDt);
-                	executionDate = Utilities.convertStringToDate(dateFormat, requestExecutionDt);
-                	
-                	 if(creationDate.compareTo(executionDate)>0){
-                         errorMsg = errorMsg.concat("Request Creation Date is greater than Request Execution Date.");
-                     }
-                }
-                
-                if(isLockInStartDateValid && isLockInEndDateValid){
-                    lockInStartDate = Utilities.convertStringToDate(dateFormat, lockInStart);
-                	lockInEndDate = Utilities.convertStringToDate(dateFormat, lockInEnd);
-                	
-                	 if(lockInStartDate.compareTo(lockInEndDate)>0){
-                         errorMsg = errorMsg.concat("Lock In Start Date is greater than Lock In End Date");
-                     }
-                }
-                
+            	errorMsg = fieldValidations(externalMassReqId,massReqType,reqCreator,dateFormat,requestCreationDt,requestExecutionDt,
+                		lockInStart,lockInEnd,errorMsg,isChangeConfig);
+            	                
                 //Create output file
                 File xmlFile = new File(destination);
         		xmlFile.createNewFile();
@@ -201,67 +147,12 @@ public class XMLConverter {
             	requestCreationDt = xmlMassRequestHeadersMap.get("requestCreationDate");
             	requestExecutionDt = xmlMassRequestHeadersMap.get("requestExecutionDate");
             	dateFormat = xmlMassRequestHeadersMap.get("dateFormat");
-            	lockInStart = xmlOptionalConfigurationProperty.get("LOCK_IN_START_DATE");
-            	lockInEnd = xmlOptionalConfigurationProperty.get("LOCK_IN_END_DATE");
+            	lockInStart = xmlOptionalConfigurationProperty.get("Lock_In_Start_Date");
+            	lockInEnd = xmlOptionalConfigurationProperty.get("Lock_In_End_Date");
             	
-            	if(externalMassReqId == null || externalMassReqId.isEmpty()){
-            		errorMsg = errorMsg.concat("External mass request ID is required. <br/>");
-            	}
-            	if(massReqType == null || massReqType.isEmpty() ){
-            		errorMsg = errorMsg.concat("Mass request type is required. <br/>");
-            	}
-            	
-            	if (reqCreator == null || reqCreator.isEmpty()){
-            		errorMsg = errorMsg.concat("Request Creator is required. <br/>");
-            	}
-            	if(dateFormat!=null) {
-            		if (requestCreationDt!=null) {
-            			if(!Utilities.isValidDateFormat(dateFormat, requestCreationDt)){
-                        	errorMsg = errorMsg.concat("Invalid request creation date format. <br/>");
-                        }else{
-                        	isCreationDtValid = true;
-                        }
-            		}
-            		if(requestExecutionDt!=null) {
-                        if(!Utilities.isValidDateFormat(dateFormat,requestExecutionDt)){
-                        	errorMsg = errorMsg.concat("Invalid request execution date format. <br/>");
-                        }else{
-                        	isExecutionDtValid = true;
-                        }
-            		}
-            		if(lockInStart!=null) {
-                      if(!Utilities.isValidDateFormat(dateFormat,lockInStart)){
-                    	errorMsg = errorMsg.concat("Invalid lock in start date format. <br/>");
-                      }else{
-                    	  isLockInStartDateValid = true;
-                      }
-            		}
-            		if(lockInEnd!=null) {
-                        if(!Utilities.isValidDateFormat(dateFormat,lockInEnd)){
-                      	errorMsg = errorMsg.concat("Invalid lock in end date format. <br/>");
-                        }else{
-                        	isLockInEndDateValid = true;
-                        }
-              		}
-            	}
-
-                if(isCreationDtValid && isExecutionDtValid){
-                	creationDate = Utilities.convertStringToDate(dateFormat, requestCreationDt);
-                	executionDate = Utilities.convertStringToDate(dateFormat, requestExecutionDt);
-                	
-                	 if(creationDate.compareTo(executionDate)>0){
-                         errorMsg = errorMsg.concat("Request Creation Date is greater than Request Execution Date.");
-                     }
-                }
-                
-                if(isLockInStartDateValid && isLockInEndDateValid){
-                    lockInStartDate = Utilities.convertStringToDate(dateFormat, lockInStart);
-                	lockInEndDate = Utilities.convertStringToDate(dateFormat, lockInEnd);
-                	
-                	 if(lockInStartDate.compareTo(lockInEndDate)>0){
-                         errorMsg = errorMsg.concat("Lock In Start Date is greater than Lock In End Date");
-                     }
-                }
+            	errorMsg = fieldValidations(externalMassReqId,massReqType,reqCreator,dateFormat,requestCreationDt,requestExecutionDt,
+                		lockInStart,lockInEnd,errorMsg,isChangeConfig);
+            	            	
                 
                 //Create output file
                 File xmlFile = new File(destination);
@@ -276,5 +167,84 @@ public class XMLConverter {
         }
         return errorMsg;
 		
+    }
+    
+    public String fieldValidations(String externalMassReqId, String massReqType, String reqCreator, String dateFormat,String requestCreationDt, String requestExecutionDt,
+    		String lockInStart, String lockInEnd, String errorMsg,Boolean isChangeConfig){
+    	if(externalMassReqId == null || externalMassReqId.isEmpty()){
+    		errorMsg = errorMsg.concat("External mass request ID is required. <br/>");
+    	}
+    	if(massReqType == null || massReqType.isEmpty() ){
+    		errorMsg = errorMsg.concat("Mass request type is required. <br/>");
+    	}
+    	
+    	if (reqCreator == null || reqCreator.isEmpty()){
+    		errorMsg = errorMsg.concat("Request Creator is required. <br/>");
+    	}
+    	if(dateFormat!=null && !dateFormat.isEmpty()) {
+    		if (requestCreationDt!=null && !requestCreationDt.isEmpty()) {
+    			if(!Utilities.isValidDateFormat(dateFormat, requestCreationDt)){
+                	errorMsg = errorMsg.concat("Invalid request creation date format. <br/>");
+                }else{
+                	isCreationDtValid = true;
+                }
+    		}else{
+        		errorMsg = errorMsg.concat("Request Creation Date is required. <br/>");
+        	}
+    		if(requestExecutionDt!=null && !requestExecutionDt.isEmpty()) {
+                if(!Utilities.isValidDateFormat(dateFormat,requestExecutionDt)){
+                	errorMsg = errorMsg.concat("Invalid request execution date format. <br/>");
+                }else{
+                	isExecutionDtValid = true;
+                }
+    		}else{
+        		errorMsg = errorMsg.concat("Request Execution Date is required. <br/>");
+        	}
+    		if(lockInStart!=null && !lockInStart.isEmpty()) {
+              if(!Utilities.isValidDateFormat(dateFormat,lockInStart)){
+            	errorMsg = errorMsg.concat("Invalid lock in start date format. <br/>");
+              }else{
+            	  isLockInStartDateValid = true;
+              }
+    		}else{
+    			if(isChangeConfig){
+    				errorMsg = errorMsg.concat("Lock In Start Date is required. <br/>");
+    			}
+        		
+        	}
+    		if(lockInEnd!=null && !lockInEnd.isEmpty()) {
+                if(!Utilities.isValidDateFormat(dateFormat,lockInEnd)){
+              	errorMsg = errorMsg.concat("Invalid lock in end date format. <br/>");
+                }else{
+                	isLockInEndDateValid = true;
+                }
+      		}else{
+      			if(isChangeConfig){
+      				errorMsg = errorMsg.concat("Lock In End Date is required. <br/>");
+      			}
+        		
+        	}
+    	}else{
+    		errorMsg = errorMsg.concat("Date Format is required. <br/>");
+    	}
+
+        if(isCreationDtValid && isExecutionDtValid){
+        	creationDate = Utilities.convertStringToDate(dateFormat, requestCreationDt);
+        	executionDate = Utilities.convertStringToDate(dateFormat, requestExecutionDt);
+        	
+        	 if(creationDate.compareTo(executionDate)>0){
+                 errorMsg = errorMsg.concat("Request Creation Date is greater than Request Execution Date.");
+             }
+        }
+        
+        if(isLockInStartDateValid && isLockInEndDateValid){
+            lockInStartDate = Utilities.convertStringToDate(dateFormat, lockInStart);
+        	lockInEndDate = Utilities.convertStringToDate(dateFormat, lockInEnd);
+        	
+        	 if(lockInStartDate.compareTo(lockInEndDate)>0){
+                 errorMsg = errorMsg.concat("Lock In Start Date is greater than Lock In End Date");
+             }
+        }
+        return errorMsg;
     }
 }
