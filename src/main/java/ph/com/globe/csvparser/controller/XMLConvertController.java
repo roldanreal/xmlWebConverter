@@ -4,7 +4,6 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -167,7 +166,7 @@ public class XMLConvertController {
         
         System.out.println("Mass request type: " + massRequestType);
         
-        if(massRequestType.equals(MassRequestTypes.REPLACE_OFFER_WITH_BASE_PLAN)) {
+        if(massRequestType.equals(MassRequestTypes.REPLACE_OFFER)) {
         	errorMsg = converter.convertToXML_replaceOfferWithBasePlan(csvSource, downloadPath, fileNameWoExtension);
         } else if(massRequestType.equals(MassRequestTypes.CHANGE_CONFIGURATION)) {
         	errorMsg = converter.convertToXML_changeConfiguration(csvSource, downloadPath, fileNameWoExtension);

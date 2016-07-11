@@ -3,11 +3,11 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Upload One File</title>
+<title>Convert CSV to XML</title>
 
 <!-- JQuery -->
 <script src="resources/js/jquery/jquery-2.1.4.min.js"></script>
-    
+
 <!-- Bootstrap -->
 <link href="resources/css/bootstrap.min.css" rel="stylesheet">
 <script src="resources/js/plugin/bootstrap-3.3.6-dist/bootstrap.min.js"></script>
@@ -27,7 +27,7 @@
         <form:form modelAttribute="myUploadForm" method="POST" action="" enctype="multipart/form-data">        
 	        <b style="color:#191970;font-size:100%">Mass Request Type:</b>
 	        	<form:select path="massRequestType">
-				  <option value="ReplaceOfferWithBasePlan">Replace Offer with Base Plan</option>
+				  <option value="ReplaceOffer">Replace Offer</option>
 				  <option value="ChangeConfiguration">Change Configuration</option>
 				</form:select>
 				<br/>
