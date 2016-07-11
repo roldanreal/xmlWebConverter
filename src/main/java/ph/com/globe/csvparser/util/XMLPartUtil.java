@@ -145,18 +145,23 @@ public class XMLPartUtil {
 	public Map<String, String> getXMLOptionalConfigurationProperty(String[] tags, String[] values) {
 		XMLOptionalConfigurationProperty ocProperty = new XMLOptionalConfigurationProperty();
     	String[] xmlOptionalConfigurationPropertyList = ocProperty.getOptionalConfigurationProperties();
+    	Map<String, String> xmlOptionalConfigurationPropertyMap = ocProperty.getXmlOptionalConfigurationPropertyMap();
     	Map<String, String> xmlOptionalConfigurationProperty = new HashMap<String, String>();
     	
     	Integer valueIndex = 0;
     	
     	for(String tag: tags) {
-    		for(String subproductIdElement: xmlOptionalConfigurationPropertyList) {
-    			if(tag.equals(subproductIdElement)) {
-    				xmlOptionalConfigurationProperty.put(tag, values[valueIndex]);
+    		for(String optionalConfigProperty: xmlOptionalConfigurationPropertyList) {
+    			if(tag.equals(optionalConfigProperty)) {
+    				System.out.println("value: " + values[valueIndex]);
+    				String xmlTag = xmlOptionalConfigurationPropertyMap.get(tag);
+    				xmlOptionalConfigurationProperty.put(xmlTag, values[valueIndex]);
+    				break;
     			}
     		}
     		valueIndex++;
     	}
+    	
     	return xmlOptionalConfigurationProperty;	
     }
 	
@@ -164,6 +169,7 @@ public class XMLPartUtil {
 		XMLOptionalConfigurationProperty ocProperty = new XMLOptionalConfigurationProperty();
     	String[] headersStringArray = ocProperty.getOptionalConfigurationProperties();
     	for(String headerName: headersStringArray) {
+    		System.out.println("headername: " + headerName);
         	String value = xmlOptionalConfigurationProperty.get(headerName);
         	if(value != null) {
         		 writer.append("\n");
