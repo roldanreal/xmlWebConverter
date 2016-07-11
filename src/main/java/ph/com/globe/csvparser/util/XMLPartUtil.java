@@ -144,7 +144,7 @@ public class XMLPartUtil {
 	
 	public Map<String, String> getXMLOptionalConfigurationProperty(String[] tags, String[] values) {
 		XMLOptionalConfigurationProperty ocProperty = new XMLOptionalConfigurationProperty();
-    	String[] xmlOptionalConfigurationPropertyList = ocProperty.getOptionalConfigurationProperties();
+		ArrayList<String> xmlOptionalConfigurationPropertyList = ocProperty.getXmlOptionalConfigurationPropertyList();
     	Map<String, String> xmlOptionalConfigurationPropertyMap = ocProperty.getXmlOptionalConfigurationPropertyMap();
     	Map<String, String> xmlOptionalConfigurationProperty = new HashMap<String, String>();
     	
@@ -153,7 +153,7 @@ public class XMLPartUtil {
     	for(String tag: tags) {
     		for(String optionalConfigProperty: xmlOptionalConfigurationPropertyList) {
     			if(tag.equals(optionalConfigProperty)) {
-    				System.out.println("value: " + values[valueIndex]);
+    				System.out.println("header: " + tag + ", value: " + values[valueIndex]);
     				String xmlTag = xmlOptionalConfigurationPropertyMap.get(tag);
     				xmlOptionalConfigurationProperty.put(xmlTag, values[valueIndex]);
     				break;
