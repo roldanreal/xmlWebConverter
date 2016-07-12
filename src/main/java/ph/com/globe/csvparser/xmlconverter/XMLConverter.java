@@ -39,6 +39,7 @@ public class XMLConverter {
     private String massReqType;  
     private String reqCreator;
     private Boolean isChangeConfig = false;
+    private ArrayList<String> msisdns = new ArrayList<String>();
    
     
     public String convertToXML_changeConfiguration(String csvSource, String destination, String fileName) {//GEN-FIRST:event_convertActionPerformed
@@ -85,17 +86,21 @@ public class XMLConverter {
             	dateFormat = xmlMassRequestHeadersMap.get("dateFormat");
             	lockInStart = xmlOptionalConfigurationProperty.get("Lock_In_Start_Date");
             	lockInEnd = xmlOptionalConfigurationProperty.get("Lock_In_End_Date");
+            	msisdns = xmlIdElementMap.get("ExternalProductID");
             	isChangeConfig = true;
             	
             	errorMsg = fieldValidations(externalMassReqId,massReqType,reqCreator,dateFormat,requestCreationDt,requestExecutionDt,
-                		lockInStart,lockInEnd,errorMsg,isChangeConfig);
-            	                
-                //Create output file
-                File xmlFile = new File(destination);
-        		xmlFile.createNewFile();
-        		
-        		//write to created file
-                util.printXML(xmlFile, xmlMassRequestHeadersMap, xmlMassRequestDetailsMap, xmlSubProductIDElementMap, xmlOptionalConfigurationProperty, xmlDynamicPropertyMap, xmlIdElementMap);
+                		lockInStart,lockInEnd,errorMsg, msisdns, isChangeConfig);
+            	 
+            	//if no error
+            	if(errorMsg.equals("")) {
+            		//Create output file
+                    File xmlFile = new File(destination);
+            		xmlFile.createNewFile();
+            		
+            		//write to created file
+                    util.printXML(xmlFile, xmlMassRequestHeadersMap, xmlMassRequestDetailsMap, xmlSubProductIDElementMap, xmlOptionalConfigurationProperty, xmlDynamicPropertyMap, xmlIdElementMap);
+            	}
                
             }
         } catch (Exception e) {
@@ -149,11 +154,12 @@ public class XMLConverter {
             	dateFormat = xmlMassRequestHeadersMap.get("dateFormat");
             	lockInStart = xmlOptionalConfigurationProperty.get("Lock_In_Start_Date");
             	lockInEnd = xmlOptionalConfigurationProperty.get("Lock_In_End_Date");
+            	msisdns = xmlIdElementMap.get("ExternalProductID");
             	
             	errorMsg = fieldValidations(externalMassReqId,massReqType,reqCreator,dateFormat,requestCreationDt,requestExecutionDt,
-                		lockInStart,lockInEnd,errorMsg,isChangeConfig);
+                		lockInStart,lockInEnd,errorMsg,msisdns,isChangeConfig);
             	            	
-                
+               
                 //Create output file
                 File xmlFile = new File(destination);
         		xmlFile.createNewFile();
@@ -170,7 +176,10 @@ public class XMLConverter {
     }
     
     public String fieldValidations(String externalMassReqId, String massReqType, String reqCreator, String dateFormat,String requestCreationDt, String requestExecutionDt,
-    		String lockInStart, String lockInEnd, String errorMsg,Boolean isChangeConfig){
+    		String lockInStart, String lockInEnd, String errorMsg, ArrayList<String> msisdns, Boolean isChangeConfig){
+    	
+    	
+    	System.out.println("MSISDN Size: " + msisdns.size());
     	if(externalMassReqId == null || externalMassReqId.isEmpty()){
     		errorMsg = errorMsg.concat("External mass request ID is required. <br/>");
     	}
@@ -245,6 +254,27 @@ public class XMLConverter {
                  errorMsg = errorMsg.concat("Lock In Start Date is greater than Lock In End Date");
              }
         }
+        
+        if(msisdns!=null && msisdns.size()>0) {
+        	int ctr = 0;
+			int invalidMsisdnCtr = 0;
+        	String invalidMSISDN = "Invalid MSISDN on line number(s) ";
+        	for(String msisdn: msisdns) {
+        		System.out.println("MSISDN: " + msisdn);
+        		ctr++;
+				if(msisdn==null || !msisdn.matches("\\d+?")) {
+					invalidMsisdnCtr++;
+					if(invalidMsisdnCtr > 1)
+						invalidMSISDN += ", " + (ctr+1);
+					else
+						invalidMSISDN += " " + (ctr+1);
+				}
+        	}
+        	if(invalidMsisdnCtr>0) {
+				errorMsg = errorMsg.concat(invalidMSISDN);
+			}
+        }
+
         return errorMsg;
     }
 }

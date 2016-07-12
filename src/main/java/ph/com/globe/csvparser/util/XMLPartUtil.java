@@ -55,10 +55,7 @@ public class XMLPartUtil {
     		headersMap.put("requestDescription", requestDescription);
     		
     	}
-    	
-    	
 		return headersMap;
-    	
     }
 	
 	public void printMassRequestHeader(PrintWriter writer, Map<String, String> xmlMassRequestHeadersMap) {
@@ -153,7 +150,6 @@ public class XMLPartUtil {
     	for(String tag: tags) {
     		for(String optionalConfigProperty: xmlOptionalConfigurationPropertyList) {
     			if(tag.equals(optionalConfigProperty)) {
-    				System.out.println("header: " + tag + ", value: " + values[valueIndex]);
     				String xmlTag = xmlOptionalConfigurationPropertyMap.get(tag);
     				xmlOptionalConfigurationProperty.put(xmlTag, values[valueIndex]);
     				break;
@@ -169,7 +165,6 @@ public class XMLPartUtil {
 		XMLOptionalConfigurationProperty ocProperty = new XMLOptionalConfigurationProperty();
     	String[] headersStringArray = ocProperty.getOptionalConfigurationProperties();
     	for(String headerName: headersStringArray) {
-    		System.out.println("headername: " + headerName);
         	String value = xmlOptionalConfigurationProperty.get(headerName);
         	if(value != null) {
         		 writer.append("\n");
@@ -188,7 +183,6 @@ public class XMLPartUtil {
     	for(String tag: tags) {
     		for(String xmlDynamicProperty: xmlDynamicPropertyList) {
     			if(tag.equals(xmlDynamicProperty)) {
-    				System.out.println("Header: " + tag + ", value: " + values[valueIndex]);
     				xmlDynamicPropertyMap.put(tag, values[valueIndex]);
     			}
     		}
@@ -226,7 +220,10 @@ public class XMLPartUtil {
     				headerName = xmlIdElementMap.get(xmlIdElement);
     				//loop through listValue and get all MSISDNs
     				for(String value: listValue) {
-    					msisdnList.add(value.split("\\,")[valueIndex]);
+    					if((valueIndex+1) > value.split("\\,").length)
+    						msisdnList.add(null);
+    					else
+    						msisdnList.add(value.split("\\,")[valueIndex]);
     				}
     				break;
     			}

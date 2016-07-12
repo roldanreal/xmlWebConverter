@@ -1,7 +1,7 @@
 package ph.com.globe.csvparser.constant;
 
 public class XMLTags {
-	public static final String header_handleMassOperation_top= "HandleMassOperation|~|<?xml version=\"1.0\" encoding=\"UTF-8\"?>";    
+	public static final String header_handleMassOperation_top= "<HandleMassOperation|~|<?xml version=\"1.0\" encoding=\"UTF-8\"?>";    
     public static final String header_interface="<Interface xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"OmsInterface.xsd\">";
     public static final String header_handleMassOperation = "<HandleMassOperation>";
     public static final String header_handleMassOperationRequest = "<HandleMassOperationRequest>";
