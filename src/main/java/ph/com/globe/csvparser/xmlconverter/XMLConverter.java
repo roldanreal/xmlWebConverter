@@ -77,6 +77,8 @@ public class XMLConverter {
                 Map<String, String> xmlOptionalConfigurationProperty = util.getXMLOptionalConfigurationProperty(tags, values);
                 Map<String, String> xmlDynamicPropertyMap = util.getXMLDynamicProperty(tags, values);
                 Map<String, ArrayList<String>> xmlIdElementMap = util.getXMLIdElementsMap(tags, listValue);
+                Map<String, ArrayList<String>> xmlOptionalConfigurationPropertyListMap = util.getXMLOptionalConfigurationPropertyListMap(tags, listValue);
+                
                 
             	externalMassReqId = xmlMassRequestHeadersMap.get("externalMassRequestID");
             	massReqType = xmlMassRequestHeadersMap.get("massRequestType");
@@ -99,7 +101,8 @@ public class XMLConverter {
             		xmlFile.createNewFile();
             		
             		//write to created file
-                    util.printXML(xmlFile, xmlMassRequestHeadersMap, xmlMassRequestDetailsMap, xmlSubProductIDElementMap, xmlOptionalConfigurationProperty, xmlDynamicPropertyMap, xmlIdElementMap);
+            		 util.printXMLForMultipleChangeConfig(xmlFile, xmlMassRequestHeadersMap, xmlMassRequestDetailsMap, xmlSubProductIDElementMap, xmlOptionalConfigurationProperty, xmlDynamicPropertyMap, xmlIdElementMap,xmlOptionalConfigurationPropertyListMap);
+            	
             	}
                
             }
@@ -242,7 +245,7 @@ public class XMLConverter {
         	executionDate = Utilities.convertStringToDate(dateFormat, requestExecutionDt);
         	
         	 if(creationDate.compareTo(executionDate)>0){
-                 errorMsg = errorMsg.concat("Request Creation Date is greater than Request Execution Date.");
+                 errorMsg = errorMsg.concat("Request Creation Date is greater than Request Execution Date. <br/>");
              }
         }
         
@@ -251,7 +254,7 @@ public class XMLConverter {
         	lockInEndDate = Utilities.convertStringToDate(dateFormat, lockInEnd);
         	
         	 if(lockInStartDate.compareTo(lockInEndDate)>0){
-                 errorMsg = errorMsg.concat("Lock In Start Date is greater than Lock In End Date");
+                 errorMsg = errorMsg.concat("Lock In Start Date is greater than Lock In End Date. <br/>");
              }
         }
         
@@ -271,7 +274,7 @@ public class XMLConverter {
 				}
         	}
         	if(invalidMsisdnCtr>0) {
-				errorMsg = errorMsg.concat(invalidMSISDN);
+				errorMsg = errorMsg.concat(invalidMSISDN).concat("<br/>");
 			}
         }
 

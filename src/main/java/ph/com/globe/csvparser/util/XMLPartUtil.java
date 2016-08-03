@@ -173,6 +173,18 @@ public class XMLPartUtil {
         }
     }
 	
+	public void printXMLOptionalConfigurationPropertyMultiple(PrintWriter writer, Map<String, ArrayList<String>> xmlOptionalConfigurationPropertyListMap) {
+		XMLOptionalConfigurationProperty ocProperty = new XMLOptionalConfigurationProperty();
+    	String[] headersStringArray = ocProperty.getOptionalConfigurationProperties();
+    	for(String headerName: headersStringArray) {
+        	ArrayList<String> value = xmlOptionalConfigurationPropertyListMap.get(headerName);
+        	if(value != null) {
+        		 writer.append("\n");
+                 writer.append("\t\t\t\t\t\t" + XMLTags.header_optionalConfigurationProperty  + " propertyName=\"" + headerName   + "\"" + " propertyValue=\"" + value +"\"/>");
+        	}
+        }
+    }
+	
 	public Map<String, String> getXMLDynamicProperty(String[] tags, String[] values) {
 		XMLDynamicProperty dynamicProperty = new XMLDynamicProperty();
     	String[] xmlDynamicPropertyList = dynamicProperty.getDynamicProperties();
@@ -237,6 +249,41 @@ public class XMLPartUtil {
 		
 	}
 	
+	public Map<String, ArrayList<String>> getXMLOptionalConfigurationPropertyListMap(String[] tags, List<String> listValue) {
+
+		XMLOptionalConfigurationProperty optionalConfigurationProperty = new XMLOptionalConfigurationProperty();
+    	String[] optionalConfigurationPropertyList = optionalConfigurationProperty.getOptionalConfigurationProperties2();
+    	Map<String, String> optionalConfigurationPropertyMap = optionalConfigurationProperty.getXmlOptionalConfigurationPropertyMap();
+    	Map<String, ArrayList<String>> xmlOptionalConfigurationPropertyMap = new HashMap<String, ArrayList<String>>();
+    	List<String> lockInDateList = new ArrayList<String>();
+
+    	Integer valueIndex = 0;
+    	
+    	for(String tag: tags) {
+    		for(String xmlOptionalConfigurationProperty: optionalConfigurationPropertyList) {
+    			if(tag.equals(xmlOptionalConfigurationProperty)) {
+    				String xmlTag = optionalConfigurationPropertyMap.get(tag);
+    				lockInDateList = new ArrayList<String>();
+    				//loop through listValue and get all lock in dates
+    				for(String value: listValue) {
+    					if((valueIndex+1) > value.split("\\,").length){
+    						lockInDateList.add(null);
+    					}else{
+    						lockInDateList.add(value.split("\\,")[valueIndex]);
+    						xmlOptionalConfigurationPropertyMap.put(xmlTag, (ArrayList<String>) lockInDateList);
+    					}    						
+    				}
+    				break;
+    			}
+    		}
+    		valueIndex++;
+    	}
+    	
+   	
+    	return xmlOptionalConfigurationPropertyMap;
+		
+	}
+	
 	public void printXMLIdElement(PrintWriter writer, Map<String, ArrayList<String>> xmlIdElementMap) {
 		Iterator<Entry<String, ArrayList<String>>> entries = xmlIdElementMap.entrySet().iterator();
 			while (entries.hasNext()) {
@@ -253,6 +300,95 @@ public class XMLPartUtil {
                 	writer.append("\t\t\t\t" +  XMLTags.footer_massLineInfo);
 		    	}
 			}
+	}
+	
+	public void printXMLOptionalConfigurationPropertyMultiple(XMLPartUtil util,Map<String, String> xmlMassRequestHeadersMap, Map<String, String> xmlMassRequestDetailsMap,
+											 Map<String, String> xmlSubProductIDElementMap, Map<String, String> xmlOptionalConfigurationProperty,
+											 Map<String, String> xmlDynamicPropertyMap, Map<String, ArrayList<String>> xmlIdElementMap,
+											 PrintWriter writer,Map<String, ArrayList<String>> xmlOptionalConfigurationPropertyListMap) {
+		Iterator<Entry<String, ArrayList<String>>> msisdnEntries = xmlIdElementMap.entrySet().iterator();
+		Iterator<Entry<String, ArrayList<String>>> entries = xmlOptionalConfigurationPropertyListMap.entrySet().iterator();
+			while (msisdnEntries.hasNext()) {
+				Entry<String, ArrayList<String>> entry = msisdnEntries.next();
+				String header = entry.getKey();
+				ArrayList<String> lockInDateList = entry.getValue();
+				ArrayList<String> msisdnList = entry.getValue();
+				int ctr = 0;
+				for(String msisdn: msisdnList) {
+					 writer.append("\t\t\t" + XMLTags.header_handleMassOperationRequest);
+				        writer.append("\n");
+				       
+				        //Add MassRequestHeader parameters
+				        util.printMassRequestHeader(writer, xmlMassRequestHeadersMap);
+
+				        //Add MassRequestDetails header and its parameters
+				        util.printMassRequestDetails(writer, xmlMassRequestDetailsMap);
+				        
+				        //Add OptionalConfigurationItem and its parameter
+				        util.printOptionalConfigurationItem(writer, xmlMassRequestHeadersMap);
+				        
+				        //Add SubProductIDElement and its parameter
+				        util.printXMLSubProductIDElement(writer, xmlSubProductIDElementMap);
+				        
+				        //Add OptionalConfigurationProperty and its parameter
+				        util.printXMLOptionalConfigurationPropertyMultiple(writer, xmlOptionalConfigurationPropertyListMap);
+				        
+				        writer.append("\n");
+				        writer.append("\t\t\t\t\t" +  XMLTags.footer_optionalConfigurationItem);
+				        
+				        //Add DynamicProperty and its paramater
+				        util.printXMLDynamicProperty(writer, xmlDynamicPropertyMap);
+				        
+				        writer.append("\n");
+				        writer.append("\t\t\t\t" +  XMLTags.footer_massRequestDetails);
+				        
+				        //Add MassLineInfo
+				        writer.append("\n");
+	                	writer.append("\t\t\t\t" +  XMLTags.header_massLineInfo + " requestLineNumber=\"" + ++ctr + "\">");
+	                	writer.append("\n");
+	                	writer.append("\t\t\t\t\t" +  XMLTags.header_idElement + " value=\"" + msisdn + "\" type=\"" + header + "\"/>");
+	                	writer.append("\n");
+	                	writer.append("\t\t\t\t" +  XMLTags.footer_massLineInfo);
+				        
+				        writer.append("\n");
+				        writer.append("\t\t\t" +  XMLTags.footer_handleMassOperationRequest);
+		    	}
+			}
+	}
+	
+
+	
+	
+	public void printXMLForMultipleChangeConfig(File xmlFile, Map<String, String> xmlMassRequestHeadersMap, Map<String, String> xmlMassRequestDetailsMap,
+			Map<String, String> xmlSubProductIDElementMap, Map<String, String> xmlOptionalConfigurationProperty,
+			Map<String, String> xmlDynamicPropertyMap, Map<String, ArrayList<String>> xmlIdElementMap,Map<String, ArrayList<String>> xmlOptionalConfigurationPropertyListMap) {
+		
+		XMLPartUtil util = new XMLPartUtil();
+		PrintWriter writer;
+		try {
+			writer = new PrintWriter(xmlFile);
+			writer.append(XMLTags.header_handleMassOperation_top);
+	        writer.append("\n");
+	        writer.append("\t" + XMLTags.header_interface);
+	        writer.append("\n");
+	        writer.append("\t\t" + XMLTags.header_handleMassOperation);
+	        writer.append("\n");
+	        util.printXMLOptionalConfigurationPropertyMultiple(util,xmlMassRequestHeadersMap,xmlMassRequestDetailsMap,xmlSubProductIDElementMap,xmlOptionalConfigurationProperty,
+	        		xmlDynamicPropertyMap,xmlIdElementMap,writer,xmlOptionalConfigurationPropertyListMap);
+	        writer.append("\n");
+	        writer.append("\t\t" + XMLTags.footer_handleMassOperation);
+	        writer.append("\n");
+	        writer.append("\t" + XMLTags.footer_interface);
+	        writer.append("\n");        
+	       
+	        writer.append(XMLTags.footer_context);
+	        
+	        //close writer
+	        writer.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void printXML(File xmlFile, Map<String, String> xmlMassRequestHeadersMap, Map<String, String> xmlMassRequestDetailsMap,

@@ -9,6 +9,7 @@ public class XMLOptionalConfigurationProperty {
 	private static final String LOCK_IN_END_DATE = "LOCK_IN_END_DATE";
 	
 	private String[] optionalConfigurationProperties = {"Lock_In_Start_Date", "Lock_In_End_Date"};
+	private String[] optionalConfigurationProperties2 = {"LOCK_IN_START_DATE", "LOCK_IN_END_DATE"};
 	
 	private ArrayList<String> xmlOptionalConfigurationPropertyList = new ArrayList<String>();
 	private Map<String, String> xmlOptionalConfigurationPropertyMap = new HashMap<String, String>();
@@ -30,6 +31,10 @@ public class XMLOptionalConfigurationProperty {
 		xmlOptionalConfigurationPropertyMap.put(LOCK_IN_END_DATE, "Lock_In_End_Date");
 	
 		return xmlOptionalConfigurationPropertyMap;
+	}
+	
+	public String[] getOptionalConfigurationProperties2() {
+		return optionalConfigurationProperties2;
 	}
 	
 }
