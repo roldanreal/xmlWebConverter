@@ -35,8 +35,8 @@
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 
 		<!-- Maximum file size: 10MB -->
-		<!-- 10MB = 1250000 Byte -->
-		<property name="maxUploadSize" value="1250000" />
+		<!-- 10MB = 10485760 Bytes -->
+		<property name="maxUploadSize" value="10485760" />
 
 	</bean>
 

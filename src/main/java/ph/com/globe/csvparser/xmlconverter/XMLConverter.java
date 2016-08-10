@@ -101,7 +101,9 @@ public class XMLConverter {
             		xmlFile.createNewFile();
             		
             		//write to created file
-            		 util.printXMLForMultipleChangeConfig(xmlFile, xmlMassRequestHeadersMap, xmlMassRequestDetailsMap, xmlSubProductIDElementMap, xmlOptionalConfigurationProperty, xmlDynamicPropertyMap, xmlIdElementMap,xmlOptionalConfigurationPropertyListMap);
+            		 util.printXMLForMultipleChangeConfig(xmlFile, xmlMassRequestHeadersMap, xmlMassRequestDetailsMap,
+            				 xmlSubProductIDElementMap, xmlOptionalConfigurationProperty, xmlDynamicPropertyMap,
+            				 xmlIdElementMap,xmlOptionalConfigurationPropertyListMap, reqCreator, requestExecutionDt);
             	
             	}
                
@@ -168,7 +170,8 @@ public class XMLConverter {
         		xmlFile.createNewFile();
         		
         		//write to created file
-                util.printXML(xmlFile, xmlMassRequestHeadersMap, xmlMassRequestDetailsMap, xmlSubProductIDElementMap, xmlOptionalConfigurationProperty, xmlDynamicPropertyMap, xmlIdElementMap);
+                util.printXML(xmlFile, xmlMassRequestHeadersMap, xmlMassRequestDetailsMap, xmlSubProductIDElementMap,
+                		xmlOptionalConfigurationProperty, xmlDynamicPropertyMap, xmlIdElementMap, reqCreator, requestExecutionDt);
                
             }
         } catch (Exception e) {

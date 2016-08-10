@@ -124,12 +124,18 @@
 		<finalName>webconverter</finalName>
 		<plugins>
 
+			
 			<!-- Config: Maven Tomcat Plugin -->
 			<!-- http://mvnrepository.com/artifact/org.apache.tomcat.maven/tomcat7-maven-plugin -->
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
 				<version>2.2</version>
+				<configuration>
+                	<warSourceDirectory>src/main/webapp</warSourceDirectory>
+                	<warName>webconverter</warName>
+                	<failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
 
 				<!-- Config: contextPath and Port (Default - /SpringMVCFileUpload : 8080) -->
 

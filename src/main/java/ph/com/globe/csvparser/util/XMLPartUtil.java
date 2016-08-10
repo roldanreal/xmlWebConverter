@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -361,7 +362,8 @@ public class XMLPartUtil {
 	
 	public void printXMLForMultipleChangeConfig(File xmlFile, Map<String, String> xmlMassRequestHeadersMap, Map<String, String> xmlMassRequestDetailsMap,
 			Map<String, String> xmlSubProductIDElementMap, Map<String, String> xmlOptionalConfigurationProperty,
-			Map<String, String> xmlDynamicPropertyMap, Map<String, ArrayList<String>> xmlIdElementMap,Map<String, ArrayList<String>> xmlOptionalConfigurationPropertyListMap) {
+			Map<String, String> xmlDynamicPropertyMap, Map<String, ArrayList<String>> xmlIdElementMap,Map<String,
+			ArrayList<String>> xmlOptionalConfigurationPropertyListMap, String requestCreator, String requestCreationDate) {
 		
 		XMLPartUtil util = new XMLPartUtil();
 		PrintWriter writer;
@@ -381,7 +383,7 @@ public class XMLPartUtil {
 	        writer.append("\t" + XMLTags.footer_interface);
 	        writer.append("\n");        
 	       
-	        writer.append(XMLTags.footer_context);
+	        util.printFooterContext(writer, requestCreator, requestCreationDate);
 	        
 	        //close writer
 	        writer.close();
@@ -391,9 +393,13 @@ public class XMLPartUtil {
 		}
 	}
 	
+	public void printFooterContext(PrintWriter writer, String requestCreator, String requestCreationDate) {
+		writer.append("<Context xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"OmsContext.xsd\" requestTime=\""+requestCreationDate+"\" userID=\""+requestCreator+"\"/>");
+	}
+	
 	public void printXML(File xmlFile, Map<String, String> xmlMassRequestHeadersMap, Map<String, String> xmlMassRequestDetailsMap,
 			Map<String, String> xmlSubProductIDElementMap, Map<String, String> xmlOptionalConfigurationProperty,
-			Map<String, String> xmlDynamicPropertyMap, Map<String, ArrayList<String>> xmlIdElementMap) {
+			Map<String, String> xmlDynamicPropertyMap, Map<String, ArrayList<String>> xmlIdElementMap, String requestCreator, String requestCreationDate) {
 		
 		XMLPartUtil util = new XMLPartUtil();
 		PrintWriter writer;
@@ -443,7 +449,7 @@ public class XMLPartUtil {
 	        writer.append("\t" + XMLTags.footer_interface);
 	        writer.append("\n");        
 	        
-	        writer.append(XMLTags.footer_context);
+	        util.printFooterContext(writer, requestCreator, requestCreationDate);
 	        
 	        //close writer
 	        writer.close();
